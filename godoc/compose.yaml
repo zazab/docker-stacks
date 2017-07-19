@@ -22,7 +22,7 @@ services:
         delay: 24h
 
     volumes:
-      - $HOME/dev/goroot/src:/go/src
+      - $GOPATH/src:/go/src:ro
       - index:/var/index
 
   server:
@@ -43,7 +43,7 @@ services:
         - "traefik.frontend.rule=Host:doc.zw.s"
 
     volumes:
-      - /home/persienko/dev/goroot/src:/go/src
+      - $GOPATH/src:/go/src:ro
       - index:/var/index
 
     networks:
