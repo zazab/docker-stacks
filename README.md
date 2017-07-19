@@ -3,11 +3,11 @@ Stacks
 
 Here is some docker stacks that I use.
 
-Traefik
+traefik
 =======
 Local traefik for managing everything
 
-godoc
+[godoc](traefik/README.md)
 =====
 dockerized godoc server with indexer
 
