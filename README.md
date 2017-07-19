@@ -7,7 +7,7 @@ traefik
 =======
 Local traefik for managing everything
 
-[godoc](traefik/README.md)
+[godoc](godoc/README.md)
 =====
 dockerized godoc server with indexer
 
