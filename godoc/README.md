@@ -2,5 +2,5 @@ godoc stack
 ===========
 
 contains from 2 containers:
-# *indexer* generates indexes for search with low throttle once in 24 hours
-# *server* serves godoc server
+1. *indexer* generates indexes for search with low throttle once in 24 hours
+2. *server* serves godoc server
