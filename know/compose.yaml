@@ -1,0 +1,43 @@
+---
+version: "3.2"
+
+services:
+  allmark:
+    image: andreaskoch/allmark:latest
+
+    command:
+      - allmark
+      - serve
+      - /data
+      - -livereload
+      - -reindex
+
+    ports:
+      - 33001
+      - 33002
+
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 24h
+
+      labels:
+        - "traefik.port=33001"
+        - "traefik.docker.network=traefik-net"
+        - "traefik.frontend.rule=Host:know.zw.s"
+
+    volumes:
+      - $HOME/know:/data:ro
+    networks:
+      - traefik-net
+
+networks:
+  traefik-net:
+    external: true
+
+volumes:
+  index:
+...
+# vim: ts=2 sts=1 sw=2
