@@ -47,8 +47,10 @@ secrets:
   devops_ca:
     external: true
   zws_crt:
-    external: true
+    external:
+      name: zw.s_crt
   zws_key:
-    external: true
+    external: 
+      name: zw.s_key
 ...
 # vim: ts=2 sts=1 sw=2
