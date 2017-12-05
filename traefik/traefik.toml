@@ -1,0 +1,26 @@
+debug = true
+RootCAs = [ "/run/secrets/devops_ca" ]
+defaultEntryPoints = ["http"]
+logLevel = "WARN"
+
+[entryPoints]
+  [entryPoints.http]
+    address = ":80"
+  [entryPoints.https]
+    address = ":443"
+    [[entryPoints.https.tls.certificates]]
+      CertFile = "/run/secrets/zws_crt"
+      KeyFile = "/run/secrets/zws_key"
+
+[web]
+  address = ":8080"
+  [web.statistics]
+    RecentErrors = 10
+  
+[docker]
+  endpoint = "unix:///var/run/docker.sock"
+  domain = "traefik"
+  watch = true
+  swarmmode = true
+
+# vim: ft=toml ts=2 sts=2 sw=2
