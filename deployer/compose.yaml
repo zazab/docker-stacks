@@ -1,0 +1,65 @@
+---
+version: "3.3"
+
+services:
+  node:
+    image: mkenney/npm:alpine
+
+    deploy:
+      mode: replicated
+      replicas: 0
+
+    volumes:
+      - $HOME/dev/deployerd-frontend-ng:/src
+
+    command:
+      - npm
+      - run
+      - dev
+
+    networks:
+      internal:
+        aliases:
+          - node
+
+  nginx:
+    image: nginx:1.13-alpine
+
+    deploy:
+      mode: replicated
+      replicas: 1
+
+      labels:
+        - "traefik.port=80"
+        - "traefik.protocol=http"
+        - "traefik.docker.network=traefik-net"
+        - "traefik.frontend.rule=Host:deployer.zw.s"
+        - "traefik.frontend.entryPoints=http,https"
+
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+
+    networks:
+      - internal
+      - traefik-net
+
+    secrets:
+      - zws_crt
+      - zws_key
+
+networks:
+  internal:
+    driver: overlay
+
+  traefik-net:
+    external: true
+
+secrets:
+  zws_crt:
+    external:
+      name: zw.s_crt
+  zws_key:
+    external:
+      name: zw.s_key
+...
+# vim: ts=2 sts=1 sw=2

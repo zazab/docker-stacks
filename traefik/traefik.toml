@@ -1,4 +1,4 @@
-debug = true
+debug = false
 RootCAs = [ "/run/secrets/devops_ca" ]
 defaultEntryPoints = ["http"]
 logLevel = "WARN"
