@@ -1,0 +1,82 @@
+version: "3.1"
+services:
+  grafana:
+    image: grafana/grafana:4.6.2
+
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - "node.hostname==zw.s"
+      restart_policy:
+        condition: on-failure
+      labels:
+        - "traefik.port=3000"
+        - "traefik.protocol=http"
+        - "traefik.docker.network=traefik-net"
+        - "traefik.frontend.rule=Host:grafana.zw.s"
+
+    environment:
+      - GF_SERVER_ROOT_URL=http://grafana.zw.s
+      - GF_SECURITY_ADMIN_PASSWORD=supersecrete
+      - GF_USERS_ALLOW_SIGN_UP=false
+
+    networks:
+      - internal
+      - traefik-net
+
+  server:
+    image: prom/prometheus:v2.0.0
+
+    networks:
+      traefik-net:
+      internal:
+        aliases:
+          - prometheus
+
+    volumes:
+      - prometheus_data:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - "node.hostname==zw.s"
+      restart_policy:
+        condition: on-failure
+      labels:
+        - "traefik.port=9090"
+        - "traefik.protocol=http"
+        - "traefik.docker.network=traefik-net"
+        - "traefik.frontend.rule=Host:prometheus.zw.s"
+
+  exporter:
+    image: prom/node-exporter:v0.15.1
+    networks:
+      internal:
+        aliases:
+          - exporter
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - "node.hostname==zw.s"
+      restart_policy:
+        condition: on-failure
+
+
+volumes:
+  prometheus_data:
+    external: true
+
+networks:
+  internal:
+    driver: overlay
+  traefik-net:
+    external: true
+
+# vim: ts=2 sts=2 sw=2
