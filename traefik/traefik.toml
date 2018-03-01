@@ -1,16 +1,11 @@
 debug = false
-RootCAs = [ "/run/secrets/devops_ca" ]
+RootCAs = []
 defaultEntryPoints = ["http"]
 logLevel = "WARN"
 
 [entryPoints]
   [entryPoints.http]
     address = ":80"
-  [entryPoints.https]
-    address = ":443"
-    [[entryPoints.https.tls.certificates]]
-      CertFile = "/run/secrets/zws_crt"
-      KeyFile = "/run/secrets/zws_key"
 
 [web]
   address = ":8080"
