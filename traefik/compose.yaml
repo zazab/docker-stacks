@@ -3,7 +3,7 @@ version: "3.2"
 
 services:
   traefik:
-    image: traefik:1.5.3-alpine
+    image: traefik:1.5.4-alpine
 
     command:
       - --web
