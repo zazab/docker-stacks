@@ -6,9 +6,6 @@ services:
     deploy:
       mode: replicated
       replicas: 1
-      placement:
-        constraints:
-          - "node.hostname==zhp430"
       restart_policy:
         condition: on-failure
       labels:
@@ -52,9 +49,6 @@ services:
     deploy:
       mode: replicated
       replicas: 1
-      placement:
-        constraints:
-          - "node.hostname==zhp430"
       restart_policy:
         condition: on-failure
       labels:
