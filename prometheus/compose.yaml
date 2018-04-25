@@ -7,7 +7,7 @@ services:
       mode: replicated
       replicas: 1
       restart_policy:
-        condition: on-failure
+        condition: any
       labels:
         - "traefik.port=3000"
         - "traefik.protocol=http"
@@ -50,12 +50,44 @@ services:
       mode: replicated
       replicas: 1
       restart_policy:
-        condition: on-failure
+        condition: any
       labels:
         - "traefik.port=9090"
         - "traefik.protocol=http"
         - "traefik.docker.network=traefik-net"
         - "traefik.frontend.rule=Host:prometheus.zw.s"
+
+  docker_exporter:
+    image: cdewitt/docker-stats-exporter:0.4.1
+
+    environment:
+      - USE_PSEUDO_FILES=1
+      - PROC_DIRECTORY=/rootfs/proc
+      - CGROUP_DIRECTORY=/rootfs/sys/fs/cgroup
+
+    networks:
+      traefik-net:
+      prometheus-net:
+        aliases:
+          - docker.exporter
+      internal:
+        aliases:
+          - prometheus
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /:/rootfs:ro
+
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: any
+      labels:
+        - "traefik.port=8081"
+        - "traefik.protocol=http"
+        - "traefik.docker.network=traefik-net"
+        - "traefik.frontend.rule=Host:dce.zw.s"
 
 volumes:
   grafana_data:
