@@ -1,17 +1,33 @@
 debug = false
-RootCAs = []
+rootCAs = ["/run/secrets/ca"]
 defaultEntryPoints = ["http"]
-logLevel = "WARN"
+logLevel = "DEBUG"
 
 [entryPoints]
   [entryPoints.http]
     address = ":80"
+  [entryPoints.web]
+    address = ":8080"
+  [entryPoints.https]
+    address = ":443"
+    [entryPoints.https.tls]
+      [[entryPoints.https.tls.certificates]]
+      CertFile = "/run/secrets/zws_crt"
+      KeyFile = "/run/secrets/zws_key" 
 
-[web]
-  address = ":8080"
-  [web.statistics]
-    RecentErrors = 10
-  
+[accessLog]
+  filePath = "/tmp/access.log"
+  format = "common"
+
+  [accessLog.filters]
+    statusCodes = ["300-600"]
+    retryAttempts = true
+
+[api]
+  entryPoint = "web"
+  dashboard = true
+  debug = true
+
 [docker]
   endpoint = "unix:///var/run/docker.sock"
   domain = "traefik"
