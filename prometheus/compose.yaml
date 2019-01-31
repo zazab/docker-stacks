@@ -28,7 +28,7 @@ services:
       - prometheus-net
 
   core:
-    image: prom/prometheus:v2.2.1
+    image: prom/prometheus:v2.3.1
 
     networks:
       prometheus-net:
@@ -51,7 +51,7 @@ services:
       - --web.console.templates=/etc/prometheus/consoles
 
     extra_hosts:
-      - "zw.s:10.10.11.184"
+      - "zw.s:172.18.0.1"
 
     deploy:
       mode: replicated
